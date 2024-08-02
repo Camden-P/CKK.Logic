@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CKK.Logic.Models
 {
-    internal class Customer
+    public class Customer
     {
         // Instance Variables
         private int _id;
