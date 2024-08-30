@@ -11,9 +11,7 @@ namespace CKK.Logic.Models
         // Instance Variables
         private int _id;
         private string _name;
-        private Product _product1;
-        private Product _product2;
-        private Product _product3;
+        private List<StoreItem> _items;
 
         // Methods
         public int GetId()
@@ -32,74 +30,79 @@ namespace CKK.Logic.Models
         {
             _name = name;
         }
-        public void AddStoreItem(Product product)
+        public StoreItem AddStoreItem(Product product, int quantity)
         {
-            if(_product1 == null)
+            // Attempt to find an item with the same product
+            var filteredProducts =
+                from item in _items
+                where item.GetProduct() == product
+                select item;
+            // If there is an item found, change the quantity, else add a new item
+            if (filteredProducts.Any())
             {
-                _product1 = product;
-            }
-            else if (_product2 == null)
-            {
-                _product2 = product;
-            }
-            else if (_product3 == null)
-            {
-                _product3 = product;
-            }
-        }
-        public void RemoveStoreItem(int productNumber)
-        {
-            if (productNumber == 1)
-            {
-                _product1 = null;
-            }
-            else if (productNumber == 2)
-            {
-                _product2 = null;
-            }
-            else if (productNumber == 3)
-            {
-                _product3 = null;
-            }
-        }
-        public Product GetStoreItem(int productNumber)
-        {
-            if (productNumber == 1)
-            {
-                return _product1;
-            }
-            else if (productNumber == 2)
-            {
-                return _product2;
-            }
-            else if (productNumber == 3)
-            {
-                return _product3;
+                foreach (var item in filteredProducts)
+                {
+                    item.SetQuantity(item.GetQuantity() + quantity);
+                    return item;
+                }
             }
             else
             {
-                return null;
+                var newItem = new StoreItem(product, quantity);
+                _items.Add(newItem);
+                return newItem;
             }
+            return null;
+        }
+        public StoreItem RemoveStoreItem(int id, int quantity)
+        {
+            // Attempt to find an item with the same id
+            var filteredProducts =
+                from item in _items
+                where item.GetProduct().GetId() == id
+                select item;
+            // If there is an item found, check for if the count is above 0, if it is, either remove a specific quantity, or the item altogether
+            if (filteredProducts.Any())
+            {
+                if (_items.Count > 0)
+                {
+                    foreach (var item in filteredProducts)
+                    {
+                        int itemQuantity = item.GetQuantity();
+                        if (itemQuantity > quantity)
+                        {
+                            item.SetQuantity(itemQuantity - quantity);
+                            return item;
+                        }
+                        else
+                        {
+                            _items.Remove(item);
+                            return null;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+        public List<StoreItem> GetStoreItems()
+        {
+            return _items;
         }
 
-        public Product FindStoreItemById(int id)
+        public StoreItem FindStoreItemById(int id)
         {
-            if (_product1.GetId() == id)
+            var filteredProducts =
+                from item in _items
+                where item.GetProduct().GetId() == id
+                select item;
+            if (filteredProducts.Any())
             {
-                return _product1;
+                foreach (var item in filteredProducts)
+                {
+                    return item;
+                }
             }
-            else if (_product2.GetId() == id)
-            {
-                return _product2;
-            }
-            else if (_product3.GetId() == id)
-            {
-                return _product3;
-            }
-            else
-            {
-                return null;
-            }
+            return null;
         }
     }
 }
