@@ -32,6 +32,10 @@ namespace CKK.Logic.Models
         }
         public StoreItem AddStoreItem(Product product, int quantity)
         {
+            if (quantity < 1)
+            {
+                return null;
+            }
             // Attempt to find an item with the same product
             var filteredProducts =
                 from item in _items
@@ -56,6 +60,10 @@ namespace CKK.Logic.Models
         }
         public StoreItem RemoveStoreItem(int id, int quantity)
         {
+            if (quantity < 1)
+            {
+                return null;
+            }
             // Attempt to find an item with the same id
             var filteredProducts =
                 from item in _items
@@ -64,21 +72,18 @@ namespace CKK.Logic.Models
             // If there is an item found, check for if the count is above 0, if it is, either remove a specific quantity, or the item altogether
             if (filteredProducts.Any())
             {
-                if (_items.Count > 0)
+                foreach (var item in filteredProducts)
                 {
-                    foreach (var item in filteredProducts)
+                    int itemQuantity = item.GetQuantity();
+                    if (itemQuantity > quantity)
                     {
-                        int itemQuantity = item.GetQuantity();
-                        if (itemQuantity > quantity)
-                        {
-                            item.SetQuantity(itemQuantity - quantity);
-                            return item;
-                        }
-                        else
-                        {
-                            _items.Remove(item);
-                            return null;
-                        }
+                        item.SetQuantity(itemQuantity - quantity);
+                        return item;
+                    }
+                    else
+                    {
+                        item.SetQuantity(0);
+                        return item;
                     }
                 }
             }
