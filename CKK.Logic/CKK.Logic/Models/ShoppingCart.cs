@@ -71,7 +71,7 @@ namespace CKK.Logic.Models
             }
             return null;
         }
-        public ShoppingCartItem RemoveProduct(Product product, int quantity)
+        public ShoppingCartItem RemoveProduct(int id, int quantity)
         {
             if (quantity < 1)
             {
@@ -79,7 +79,7 @@ namespace CKK.Logic.Models
             }
             var filteredProducts =
                 from item in _products
-                where item.GetProduct() == product
+                where item.GetProduct().GetId() == id
                 select item;
             if (filteredProducts.Any())
             {
