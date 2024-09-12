@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CKK.Logic.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,37 +7,9 @@ using System.Threading.Tasks;
 
 namespace CKK.Logic.Models
 {
-    public class Product
+    public class Product : Entity
     {
-        // Instance Variables
-        private int _id;
-        private string _name;
-        private decimal _price;
-
-        // Methods
-        public int GetId()
-        {
-            return _id;
-        }
-        public void SetId(int id)
-        {
-            _id = id;
-        }
-        public string GetName()
-        {
-            return _name;
-        }
-        public void SetName(string name)
-        {
-            _name = name;
-        }
-        public decimal GetPrice()
-        {
-            return _price;
-        }
-        public void SetPrice(decimal price)
-        {
-            _price = price;
-        }
+        // Properties
+        public decimal Price { get; set; }
     }
 }
