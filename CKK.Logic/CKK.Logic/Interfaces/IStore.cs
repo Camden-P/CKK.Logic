@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CKK.Logic.Interfaces
 {
-    internal interface IStore
+    public interface IStore
     {
         StoreItem AddStoreItem(Product product, int quantity);
         StoreItem RemoveStoreItem(int id, int quantity);
