@@ -1,4 +1,5 @@
 ﻿using CKK.Logic.Interfaces;
+using CKK.Logic.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,10 @@ namespace CKK.Logic.Models
         }
         public ShoppingCartItem GetProductById(int id)
         {
+            if (id < 0)
+            {
+                throw new InvalidIdException();
+            }
             // Check if there are products that match the Id, select any that match
             var filteredProducts =
                 from item in Products
@@ -48,7 +53,7 @@ namespace CKK.Logic.Models
         {
             if (quantity < 1)
             {
-                return null;
+                throw new InventoryItemStockTooLowException();
             }
             // Attempt to find item with same product
             var filteredProducts =
@@ -74,9 +79,9 @@ namespace CKK.Logic.Models
         }
         public ShoppingCartItem RemoveProduct(int id, int quantity)
         {
-            if (quantity < 1)
+            if (quantity < 0)
             {
-                return null;
+                throw new ArgumentOutOfRangeException();
             }
             var filteredProducts =
                 from item in Products
@@ -98,6 +103,10 @@ namespace CKK.Logic.Models
                         return item;
                     }
                 }
+            }
+            else
+            {
+                throw new ProductDoesNotExistException();
             }
             return null;
         }
