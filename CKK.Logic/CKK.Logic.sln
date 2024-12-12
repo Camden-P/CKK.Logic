@@ -5,7 +5,9 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CKK.Logic", "CKK.Logic\CKK.Logic.csproj", "{59B8C9DF-7D78-4B12-8383-55B1C0A9560B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CKK.tests", "CKK.tests\CKK.tests.csproj", "{D814B9FD-0455-40B1-B0A6-FF7594C327E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CKK.tests", "CKK.tests\CKK.tests.csproj", "{D814B9FD-0455-40B1-B0A6-FF7594C327E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CKK.UI", "CKK.UI\CKK.UI.csproj", "{EAA42D88-3569-487D-9445-83C60D2DF024}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{D814B9FD-0455-40B1-B0A6-FF7594C327E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D814B9FD-0455-40B1-B0A6-FF7594C327E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D814B9FD-0455-40B1-B0A6-FF7594C327E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAA42D88-3569-487D-9445-83C60D2DF024}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAA42D88-3569-487D-9445-83C60D2DF024}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAA42D88-3569-487D-9445-83C60D2DF024}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAA42D88-3569-487D-9445-83C60D2DF024}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -35,6 +35,24 @@ namespace CKK.Logic.Models
             {
                 foreach (var item in filteredProducts)
                 {
+                    if (item.Product.Id == 0)
+                    {
+                        var filteredIds =
+                            from itemid in _items
+                            select itemid.Product.Id;
+                        int newId = 1;
+                        foreach (var id in filteredIds)
+                        {
+                            if (id == newId)
+                            {
+                                newId++;
+                            }
+                            else
+                            {
+                                item.Product.Id = newId;
+                            }
+                        }
+                    }
                     item.Quantity += quantity;
                     return item;
                 }
@@ -42,6 +60,21 @@ namespace CKK.Logic.Models
             else
             {
                 var newItem = new StoreItem(product, quantity);
+                var filteredIds =
+                    from itemid in _items
+                    select itemid.Product.Id;
+                int newId = 1;
+                if (filteredIds.Any())
+                {
+                    foreach (var id in filteredIds)
+                    {
+                        if (id == newId)
+                        {
+                            newId++;
+                        }
+                    }
+                }
+                newItem.Product.Id = newId;
                 _items.Add(newItem);
                 return newItem;
             }
@@ -81,6 +114,26 @@ namespace CKK.Logic.Models
             }
             return null;
         }
+
+        public void DeleteStoreItem(int id)
+        {
+            var filteredProducts =
+                from item in _items
+                where item.Product.Id == id
+                select item;
+            if (filteredProducts.Any())
+            {
+                foreach(var item in filteredProducts)
+                {
+                    _items.Remove(item);
+                }
+            }
+            else
+            {
+                throw new ProductDoesNotExistException();
+            }
+        }
+
         public List<StoreItem> GetStoreItems()
         {
             return _items;
