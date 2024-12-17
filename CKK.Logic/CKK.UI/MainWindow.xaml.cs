@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CKK.Logic.Interfaces;
 using CKK.Logic.Models;
+using CKK.Persistance.Models;
 
 namespace CKK.UI
 {
@@ -23,14 +24,14 @@ namespace CKK.UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IStore Store;
+        private FileStore Store;
         public ObservableCollection<StoreItem> _Items { get; private set; }
         public ObservableCollection<Product> _Products { get; private set; }
         EditStoreItem editItem = new EditStoreItem();
 
         public MainWindow()
         {
-            Store = new Store();
+            Store = new FileStore();
             InitializeComponent();
             _Items = new ObservableCollection<StoreItem>();
             _Products = new ObservableCollection<Product>();
@@ -58,6 +59,7 @@ namespace CKK.UI
             {
                 Store.AddStoreItem(product, editItem.AddQuantity);
             }
+            Store.Save();
             UpdateList();
         }
         private void RemoveItemClick(object sender, EventArgs args)
@@ -65,23 +67,27 @@ namespace CKK.UI
             int productId = editItem.RemoveID;
             Product product = Store.FindStoreItemById(productId).Product;
             Store.RemoveStoreItem(product.Id, editItem.RemoveQuantity);
+            Store.Save();
             UpdateList();
         }
         private void ChangeQuantityClick(object sender, EventArgs args)
         {
             int productId = editItem.QuantityID;
             Store.FindStoreItemById(productId).Quantity = editItem.QuantityValue;
+            Store.Save();
         }
         private void ChangeNameClick(object sender, EventArgs args)
         {
             int productId = editItem.NameID;
             Store.FindStoreItemById(productId).Product.Name = editItem.NameValue;
+            Store.Save();
             UpdateList();
         }
         private void ChangePriceClick(object sender, EventArgs args)
         {
             int productId = editItem.PriceID;
             Store.FindStoreItemById(productId).Product.Price = editItem.PriceValue;
+            Store.Save();
             UpdateList();
         }
 
