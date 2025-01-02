@@ -14,5 +14,9 @@ namespace CKK.Logic.Interfaces
         void DeleteStoreItem(int id);
         StoreItem FindStoreItemById(int id);
         List<StoreItem> GetStoreItems();
+        List<StoreItem> GetAllProductsByName(string name);
+        List<StoreItem> GetProductsByQuantity();
+        List<StoreItem> GetProductsByPrice();
+        List<StoreItem> GetProductsByID();
     }
 }

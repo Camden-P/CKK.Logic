@@ -27,6 +27,7 @@ namespace CKK.UI
         private FileStore Store;
         public ObservableCollection<StoreItem> _Items { get; private set; }
         public ObservableCollection<Product> _Products { get; private set; }
+        private string[] sorts = { "ID", "Quantity", "Price" };
         EditStoreItem editItem = new EditStoreItem();
 
         public MainWindow()
@@ -34,8 +35,8 @@ namespace CKK.UI
             Store = new FileStore();
             InitializeComponent();
             _Items = new ObservableCollection<StoreItem>();
-            _Products = new ObservableCollection<Product>();
-            inventoryList.ItemsSource = _Products;
+            sortBox.ItemsSource = sorts;
+            inventoryList.ItemsSource = _Items;
             this.DataContext = editItem;
             UpdateList();
         }
@@ -98,19 +99,49 @@ namespace CKK.UI
             if (selectedItemIndex >= 0)
             {
                 selectedItemWindow.Show();
-                selectedItemWindow.UpdateValues(_Products[selectedItemIndex], _Items[selectedItemIndex].Quantity);
+                selectedItemWindow.UpdateValues(_Items[selectedItemIndex].Product, _Items[selectedItemIndex].Quantity);
                 inventoryList.SelectedIndex = -1;
+            }
+        }
+
+        private void SearchTextChanged(object sender, EventArgs args)
+        {
+            UpdateList(Store.GetAllProductsByName(searchBox.Text));
+        }
+
+        private void SortBoxChanged(object sender, EventArgs args)
+        {
+            var option = sortBox.SelectedItem;
+
+            if (option == "ID")
+            {
+                UpdateList(Store.GetProductsByID());
+            }
+            else if (option == "Quantity")
+            {
+                UpdateList(Store.GetProductsByQuantity());
+            }
+            else if (option == "Price")
+            {
+                UpdateList(Store.GetProductsByPrice());
             }
         }
 
         private void UpdateList()
         {
             _Items.Clear();
-            _Products.Clear();
             foreach (StoreItem storeItem in new ObservableCollection<StoreItem>(Store.GetStoreItems()))
             {
                 _Items.Add(storeItem);
-                _Products.Add(storeItem.Product);
+            }
+        }
+
+        private void UpdateList(List<StoreItem> storeItems)
+        {
+            _Items.Clear();
+            foreach (StoreItem storeItem in new ObservableCollection<StoreItem>(storeItems))
+            {
+                _Items.Add(storeItem);
             }
         }
     }

@@ -164,6 +164,122 @@ namespace CKK.Persistance.Models
             return items;
         }
 
+        public List<StoreItem> GetAllProductsByName(string name) // Identical to Store.cs
+        {
+            // Create list for search
+            List<StoreItem> products = new List<StoreItem>();
+
+            // Check every item in the store
+            foreach (var item in items)
+            {
+                bool validProduct = true;
+
+                // Test if each character matches the search
+                for (int i = 0; i < name.Length; i++)
+                {
+                    if (i < item.Product.Name.Length)
+                    {
+                        if (item.Product.Name[i] != name[i])
+                        {
+                            validProduct = false;
+                        }
+                    }
+                    else
+                    {
+                        validProduct = false;
+                    }
+                }
+
+                // If it matches, add the product for the search list
+                if (validProduct)
+                {
+                    products.Add(item);
+                }
+            }
+
+            return products;
+        }
+
+        public List<StoreItem> GetProductsByQuantity() // Identical to Store.cs
+        {
+            // Get items to sort
+            List<StoreItem> sortedItems = new List<StoreItem>();
+            foreach (var item in items)
+            {
+                sortedItems.Add(item);
+            }
+
+            // Sort from largest to smallest in quantities
+            for (int i = 0; i < sortedItems.Count - 1; ++i)
+            {
+                for (int j = i + 1; j < sortedItems.Count; ++j)
+                {
+                    if (sortedItems[j].Quantity > sortedItems[i].Quantity)
+                    {
+                        SwapItems(ref sortedItems, i, j);
+                    }
+                }
+            }
+
+            return sortedItems;
+        }
+
+        public List<StoreItem> GetProductsByPrice() // Identical to Store.cs
+        {
+            // Get items to sort
+            List<StoreItem> sortedItems = new List<StoreItem>();
+            foreach (var item in items)
+            {
+                sortedItems.Add(item);
+            }
+
+            // Sort from largest to smallest in prices
+            for (int i = 0; i < sortedItems.Count - 1; ++i)
+            {
+                for (int j = i + 1; j < sortedItems.Count; ++j)
+                {
+                    if (sortedItems[j].Product.Price > sortedItems[i].Product.Price)
+                    {
+                        SwapItems(ref sortedItems, i, j);
+                    }
+                }
+            }
+
+            return sortedItems;
+        }
+
+        public List<StoreItem> GetProductsByID() // Identical to Store.cs
+        {
+            // Get items to sort
+            List<StoreItem> sortedItems = new List<StoreItem>();
+            foreach (var item in items)
+            {
+                sortedItems.Add(item);
+            }
+
+            // Sort from smallest to largest in ids
+            for (int i = 0; i < sortedItems.Count - 1; ++i)
+            {
+                for (int j = i + 1; j < sortedItems.Count; ++j)
+                {
+                    if (sortedItems[j].Product.Id < sortedItems[i].Product.Id)
+                    {
+                        SwapItems(ref sortedItems, i, j);
+                    }
+                }
+            }
+
+            return sortedItems;
+        }
+
+        private void SwapItems(ref List<StoreItem> swapItems, int first, int second) // Identical to Store.cs
+        {
+            // Swap two items with each other
+            var temp = swapItems[first];
+            swapItems[first] = swapItems[second];
+            swapItems[second] = temp;
+        }
+
         public void Load()
         {
             if (File.Exists(filePath))
