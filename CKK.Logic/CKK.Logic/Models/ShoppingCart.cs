@@ -11,6 +11,8 @@ namespace CKK.Logic.Models
     public class ShoppingCart : IShoppingCart
     {
         // Properties
+        public int ShoppingCartId { get; set; }
+        public int CustomerId { get; set; }
         public Customer Customer { get; set; }
         public List<ShoppingCartItem> Products { get; set; }
 
