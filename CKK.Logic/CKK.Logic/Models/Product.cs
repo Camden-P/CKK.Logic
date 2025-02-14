@@ -10,27 +10,10 @@ namespace CKK.Logic.Models
     [Serializable]
     public class Product : Entity
     {
-        // Instance Variables
-        private decimal _price;
-
-        // Properties
-        public decimal Price
-        {
-            get
-            {
-                return _price;
-            }
-            set
-            {
-                if (value >= 0)
-                {
-                    _price = value;
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        private decimal price;
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
     }
 }
