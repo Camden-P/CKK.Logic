@@ -29,12 +29,12 @@ namespace CKK.UI
             this.Close();
         }
 
-        public void UpdateValues(Product product, int quantity)
+        public void UpdateValues(Product product)
         {
             itemName.Content = $"Name: {product.Name}";
             itemId.Content = $"ID: {product.Id}";
             itemPrice.Content = $"Price: {product.Price}";
-            itemQuantity.Content = $"Quantity: {quantity}";
+            itemQuantity.Content = $"Quantity: {product.Quantity}";
         }
     }
 }

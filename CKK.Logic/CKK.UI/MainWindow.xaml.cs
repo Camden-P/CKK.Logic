@@ -15,7 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CKK.Logic.Interfaces;
 using CKK.Logic.Models;
-using CKK.Persistance.Models;
+using CKK.DB.Repositories;
+using CKK.DB.UOW;
 
 namespace CKK.UI
 {
@@ -24,74 +25,100 @@ namespace CKK.UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private FileStore Store;
-        public ObservableCollection<StoreItem> _Items { get; private set; }
-        public ObservableCollection<Product> _Products { get; private set; }
+        public ObservableCollection<Product> _Items { get; private set; }
         private string[] sorts = { "ID", "Quantity", "Price" };
         EditStoreItem editItem = new EditStoreItem();
+        private readonly DatabaseConnectionFactory db;
+        private ProductRepository products;
 
         public MainWindow()
         {
-            Store = new FileStore();
             InitializeComponent();
-            _Items = new ObservableCollection<StoreItem>();
+            _Items = new ObservableCollection<Product>();
             sortBox.ItemsSource = sorts;
             inventoryList.ItemsSource = _Items;
             this.DataContext = editItem;
+            db = new DatabaseConnectionFactory();
+            products = new ProductRepository(db);
             UpdateList();
         }
         private void AddItemClick(object sender, EventArgs args)
         {
+            // Create new temporary product
             var product = new Product();
             product.Name = editItem.AddProduct;
 
-            var products =
+            // Attempt to find product of same name
+            var searchedProducts =
                 from item in _Items
-                where item.Product.Name == product.Name
+                where item.Name == product.Name
                 select item;
-            if (products.Any())
+            // If product exists, just add more quantity, else create a new product
+            if (searchedProducts.Any())
             {
-                foreach(var item in products)
+                foreach(var item in searchedProducts)
                 {
-                    Store.AddStoreItem(item.Product, editItem.AddQuantity);
+                    item.Quantity += editItem.AddQuantity;
+                    products.Update(item);
                 }
             }
             else
             {
-                Store.AddStoreItem(product, editItem.AddQuantity);
+                product.Quantity = editItem.AddQuantity;
+                products.Add(product);
             }
-            Store.Save();
+
             UpdateList();
         }
         private void RemoveItemClick(object sender, EventArgs args)
         {
-            int productId = editItem.RemoveID;
-            Product product = Store.FindStoreItemById(productId).Product;
-            Store.RemoveStoreItem(product.Id, editItem.RemoveQuantity);
-            Store.Save();
+            // If the quantity would be less than 0, set it to 0
+            var product = products.GetById(editItem.RemoveID);
+            if (product.Quantity - editItem.RemoveQuantity < 0)
+            {
+                product.Quantity = 0;
+                products.Update(product);
+            }
+            else
+            {
+                product.Quantity -= editItem.RemoveQuantity;
+                products.Update(product);
+            }
+
             UpdateList();
         }
+        
+        // Change quantity of product
         private void ChangeQuantityClick(object sender, EventArgs args)
         {
-            int productId = editItem.QuantityID;
-            Store.FindStoreItemById(productId).Quantity = editItem.QuantityValue;
-            Store.Save();
-        }
-        private void ChangeNameClick(object sender, EventArgs args)
-        {
-            int productId = editItem.NameID;
-            Store.FindStoreItemById(productId).Product.Name = editItem.NameValue;
-            Store.Save();
-            UpdateList();
-        }
-        private void ChangePriceClick(object sender, EventArgs args)
-        {
-            int productId = editItem.PriceID;
-            Store.FindStoreItemById(productId).Product.Price = editItem.PriceValue;
-            Store.Save();
+            var product = products.GetById(editItem.QuantityID);
+            product.Quantity = editItem.QuantityValue;
+            products.Update(product);
+
             UpdateList();
         }
 
+        // Change name of product
+        private void ChangeNameClick(object sender, EventArgs args)
+        {
+            var product = products.GetById(editItem.NameID);
+            product.Name = editItem.NameValue;
+            products.Update(product);
+
+            UpdateList();
+        }
+
+        // Change price of product
+        private void ChangePriceClick(object sender, EventArgs args)
+        {
+            var product = products.GetById(editItem.PriceID);
+            product.Price = editItem.PriceValue;
+            products.Update(product);
+
+            UpdateList();
+        }
+
+        // Open selected item window
         private void SelectedItemChanged(object sender, EventArgs args)
         {
             int selectedItemIndex = inventoryList.SelectedIndex;
@@ -99,49 +126,49 @@ namespace CKK.UI
             if (selectedItemIndex >= 0)
             {
                 selectedItemWindow.Show();
-                selectedItemWindow.UpdateValues(_Items[selectedItemIndex].Product, _Items[selectedItemIndex].Quantity);
+                selectedItemWindow.UpdateValues(_Items[selectedItemIndex]);
                 inventoryList.SelectedIndex = -1;
             }
         }
 
+        // Search for products
         private void SearchTextChanged(object sender, EventArgs args)
         {
-            UpdateList(Store.GetAllProductsByName(searchBox.Text));
+            UpdateList(products.GetByName(searchBox.Text));
         }
 
+        // Sort products by ID, Quantity, or Price
         private void SortBoxChanged(object sender, EventArgs args)
         {
             var option = sortBox.SelectedItem;
 
             if (option == "ID")
             {
-                UpdateList(Store.GetProductsByID());
+                UpdateList(products.GetAllByID());
             }
             else if (option == "Quantity")
             {
-                UpdateList(Store.GetProductsByQuantity());
+                UpdateList(products.GetAllByQuantity());
             }
             else if (option == "Price")
             {
-                UpdateList(Store.GetProductsByPrice());
+                UpdateList(products.GetAllByPrice());
             }
         }
 
+        // Default list for listbox
         private void UpdateList()
         {
-            _Items.Clear();
-            foreach (StoreItem storeItem in new ObservableCollection<StoreItem>(Store.GetStoreItems()))
-            {
-                _Items.Add(storeItem);
-            }
+            UpdateList(products.GetAll());
         }
 
-        private void UpdateList(List<StoreItem> storeItems)
+        // Update the listbox to see latest changes
+        private void UpdateList(List<Product> list)
         {
             _Items.Clear();
-            foreach (StoreItem storeItem in new ObservableCollection<StoreItem>(storeItems))
+            foreach (var item in list)
             {
-                _Items.Add(storeItem);
+                _Items.Add(item);
             }
         }
     }
