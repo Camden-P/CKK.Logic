@@ -95,9 +95,14 @@ namespace CKK.DB.Repositories
                 var result = connection.Query<ShoppingCartItem>(sql, new { ShoppingCartId = shoppingCartId }).ToList();
 
                 decimal total = 0;
+                var productRepository = new ProductRepository(_connectionFactory); // Connect to product repository to get products
                 foreach (var item in result)
                 {
-                    total += item.Product.Price;
+                    item.Product = productRepository.GetById(item.ProductId); // Get product by id
+                    for (int i = 0; i < item.Quantity; i++) // Get quantity to determine how many items to add
+                    {
+                        total += item.Product.Price; // For each item, add the price to the total amount
+                    }
                 }
 
                 return total;
@@ -118,7 +123,7 @@ namespace CKK.DB.Repositories
         public int Update(ShoppingCartItem entity)
         {
             var sql = "UPDATE ShoppingCartItems SET ShoppingCartId = @ShoppingCartId, ProductId = @ProductId, Quantity = @Quantity" +
-                "WHERE ShoppingCartId = @ShoppingCartId AND ProductId = @ProductId";
+                " WHERE ShoppingCartId = @ShoppingCartId AND ProductId = @ProductId";
 
             using (var connection = _connectionFactory.GetConnection)
             {
