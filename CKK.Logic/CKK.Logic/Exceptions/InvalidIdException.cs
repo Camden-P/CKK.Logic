@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CKK.Logic.Exceptions
+﻿namespace CKK.Logic.Exceptions
 {
+    // If there was an ID transferred for a product is invalid, this exception will be thrown
     [Serializable]
     public class InvalidIdException : Exception
     {

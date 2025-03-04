@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CKK.DB.Interfaces
+﻿namespace CKK.DB.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork // Interface for Unit of Work
     {
         IProductRepository Products { get; }
         IOrderRepository Orders { get; }

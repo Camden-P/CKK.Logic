@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CKK.UI
+﻿namespace CKK.UI
 {
     public class EditStoreItem
     {
+        // Add item
         private string addProduct;
         public string AddProduct
         {
@@ -20,6 +15,8 @@ namespace CKK.UI
             get { return addQuantity; }
             set { addQuantity = (int)value; }
         }
+
+        // Remove item
         private int removeId;
         public int RemoveID
         {
@@ -32,6 +29,8 @@ namespace CKK.UI
             get { return removeQuantity; }
             set { removeQuantity = (int)value; }
         }
+
+        // Change quantity
         private int quantityId;
         public int QuantityID
         {
@@ -44,6 +43,8 @@ namespace CKK.UI
             get { return quantityValue; }
             set { quantityValue = (int)value; }
         }
+
+        // Change name
         private int nameId;
         public int NameID
         {
@@ -56,6 +57,8 @@ namespace CKK.UI
             get { return nameValue; }
             set { nameValue = value; }
         }
+
+        // Change price
         private int priceId;
         public int PriceID
         {

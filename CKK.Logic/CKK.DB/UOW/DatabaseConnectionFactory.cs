@@ -1,24 +1,22 @@
 ﻿using CKK.DB.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using System.Data.Common;
 using System.Configuration;
 
 namespace CKK.DB.UOW
 {
-    public class DatabaseConnectionFactory : IConnectionFactory
+    public class DatabaseConnectionFactory : IConnectionFactory // Connection to the database
     {
+        // Method to return connection string
         public static string CnnVal(string name)
         {
             return ConfigurationManager.ConnectionStrings[name].ConnectionString;
         }
 
+        // Connection string to connect to database
         private readonly string connectionString = "Data Source = (localdb)\\MSSQLLocalDB;Initial Catalog = StructuredProjectDB";
 
+        // Get connection to database
         public IDbConnection GetConnection
         {
             get

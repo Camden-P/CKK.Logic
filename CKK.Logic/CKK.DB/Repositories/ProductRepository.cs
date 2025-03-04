@@ -1,10 +1,5 @@
 ﻿using CKK.DB.Interfaces;
 using CKK.Logic.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dapper;
 
 namespace CKK.DB.Repositories
@@ -17,7 +12,7 @@ namespace CKK.DB.Repositories
             _connectionFactory = conn;
         }
 
-        public int Add(Product entity)
+        public int Add(Product entity) // Add a product to the database
         {
             var sql = "INSERT INTO Products (Price,Quantity,Name) VALUES (@Price,@Quantity,@Name)";
             
@@ -29,7 +24,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public int Delete(int id)
+        public int Delete(int id) // Delete a product from the database
         {
             var sql = "DELETE FROM Products WHERE Id = @Id";
 
@@ -41,7 +36,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public List<Product> GetAll()
+        public List<Product> GetAll() // Get all products from the database
         {
             var sql = "SELECT * FROM Products";
 
@@ -53,7 +48,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public List<Product> GetAllByID()
+        public List<Product> GetAllByID() // Get all products by ID
         {
             var sql = "SELECT * FROM Products ORDER BY Id";
 
@@ -78,7 +73,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public List<Product> GetAllByQuantity()
+        public List<Product> GetAllByQuantity() // Get all products by quantity
         {
             var sql = "SELECT * FROM Products";
 
@@ -103,7 +98,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public List<Product> GetAllByPrice()
+        public List<Product> GetAllByPrice() // Get all products by price
         {
             var sql = "SELECT * FROM Products ORDER BY Price";
 
@@ -128,7 +123,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public Product GetById(int id)
+        public Product GetById(int id) // Get a single product by ID
         {
             var sql = "SELECT * FROM Products WHERE Id = @Id";
 
@@ -140,7 +135,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public List<Product> GetByName(string name)
+        public List<Product> GetByName(string name) // Search for a product by it's Name
         {
             var sql = "SELECT * FROM Products WHERE Name LIKE CONCAT('%',@Name,'%')";
 
@@ -152,7 +147,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public int Update(Product entity)
+        public int Update(Product entity) // Update product
         {
             var sql = "UPDATE Products SET Price = @Price, Quantity = @Quantity, Name = @Name WHERE Id = @Id";
 
@@ -164,7 +159,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        private void SwapItems(ref List<Product> items, int i, int j)
+        private void SwapItems(ref List<Product> items, int i, int j) // Swap two products for sorting
         {
             var temp = items[i];
             items[i] = items[j];

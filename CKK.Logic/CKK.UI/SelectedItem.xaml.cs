@@ -1,17 +1,6 @@
 ﻿using CKK.Logic.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace CKK.UI
 {
@@ -24,11 +13,14 @@ namespace CKK.UI
         {
             InitializeComponent();
         }
+
+        // Close window when user clicks the back button
         private void BackClick(object sender, EventArgs args)
         {
             this.Close();
         }
 
+        // Populate values using data sent from the main window
         public void UpdateValues(Product product)
         {
             itemName.Content = $"Name: {product.Name}";

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CKK.Logic.Exceptions
+﻿namespace CKK.Logic.Exceptions
 {
+    // If a product does not exist, this exception will be thrown
     [Serializable]
     public class ProductDoesNotExistException : Exception
     {

@@ -1,14 +1,10 @@
 ﻿using CKK.Logic.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CKK.DB.Interfaces
 {
-    public interface IShoppingCartRepository
+    public interface IShoppingCartRepository // Repository for shopping carts
     {
+        // Methods to be included in the repository
         ShoppingCartItem AddToCart(int shoppingCartId, int productId, int quantity);
         int ClearCart(int shoppingCartId);
         decimal GetTotal(int shoppingCartId);

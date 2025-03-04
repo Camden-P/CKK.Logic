@@ -1,14 +1,8 @@
-﻿using CKK.Logic.Interfaces;
-using CKK.Logic.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CKK.Logic.Exceptions;
 
 namespace CKK.Logic.Models
 {
-    [Serializable]
+    // An product added by the customer for the Shopping Cart
     public class ShoppingCartItem
     {  
         public Product Product { get; set; }
@@ -24,6 +18,7 @@ namespace CKK.Logic.Models
             }
             set
             {
+                // If the quantity is less than 0, throw an exception
                 if (value >= 0)
                 {
                     quantity = value;
@@ -35,7 +30,7 @@ namespace CKK.Logic.Models
             }
         }
 
-        public decimal GetTotal()
+        public decimal GetTotal() // Get the total price of a product depending on the quantity
         {
             return Product.Price * Quantity;
         }

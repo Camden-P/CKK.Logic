@@ -1,13 +1,6 @@
-﻿using CKK.Logic.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CKK.Logic.Models
+﻿namespace CKK.Logic.Models
 {
-    [Serializable]
+    // A person who orders products from the store
     public class Customer
     {
         public int CustomerId { get; set; }

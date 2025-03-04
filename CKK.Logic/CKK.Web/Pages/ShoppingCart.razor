@@ -5,23 +5,27 @@
 @using CKK.DB.Interfaces
 @inject NavigationManager NavManager
 
-@if (uow == null)
+<PageTitle>Corey's Knick Knacks - Shopping Cart</PageTitle>
+
+@if (uow == null) // If there is no Unit of Work, the page will display "Loading..."
 {
     <p><em>Loading...</em></p>
 }
-else
+else // Else, the page will display the shopping cart
 {
+    <!--Header-->
     <div class="text-center">
-        <h1 class="display-4">Shopping Cart!</h1>
+        <h1 class="display-4">Shopping Cart</h1>
     </div>
 
+    <!--Items-->
     <form method="get">
         <input type="hidden" value="@order.OrderId" />
         <p>The number selectors will add your items to the shopping cart.</p>
         <div class="row">
             @foreach (var item in uow.Products.GetAll())
             {
-                <div class="card" style="width: 18rem; padding: 5px;">
+                <div class="card" style="width: 18rem; padding: 5px; margin: 10px;">
                     <div class="card-body">
                         <h5 class="card-title text-center">@item.Name</h5>
                         <p class="card-text">@item.Price.ToString("c")</p>
@@ -35,11 +39,13 @@ else
                 </div>
             }
         </div>
-        <p>The CheckOut button removes inventory based on your shopping cart and deletes your order and shopping card.</p>
+        <p>The Checkout button removes inventory based on your shopping cart and deletes your order and shopping cart.</p>
     </form>
+    <!--Checkout-->
     <a id="CheckoutBtn" @onclick="CheckOut" class="btn btn-success btn-lg btn-block">@checkoutTotal</a>
 }
 
+<!--C# code-->
 @code {
     private Order order;
     [Inject]
@@ -48,7 +54,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        if (uow != null)
+        if (uow != null) // If there is a Unit of Work, create a new order
         {
             order = uow.Orders.GetById(1);
             if (order == null)
@@ -61,22 +67,39 @@ else
         }
     }
 
+    // When a item is selected, add it to the cart
     protected void spinnerChange(int productId, object value)
     {
-        var Item = uow.ShoppingCarts.AddToCart(order.ShoppingCartId, productId, Convert.ToInt16(value));
-        UpdateTotal();
+        try
+        {
+            if ((int)value < 0) // If the value is below 0, throw an exception
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            var Item = uow.ShoppingCarts.AddToCart(order.ShoppingCartId, productId, Convert.ToInt16(value));
+            UpdateTotal();
+        }
+        catch
+        {
+            value = 0; // Change the value to 0 to have zero effect when purchasing
+        }
     }
 
+    // Update the total for checkout
     private void UpdateTotal()
     {
         var total = uow.ShoppingCarts.GetTotal(order.ShoppingCartId).ToString("c");
         checkoutTotal = "Checkout - " + total;
     }
 
+    // Purchase all items selected and proceed to checkout
     protected void CheckOut()
     {
+        // Get inventory
         var inventory = uow.Products.GetAll();
 
+        // Remove items from inventory
         var cartItems = uow.ShoppingCarts.GetProducts(order.ShoppingCartId);
         foreach (var item in cartItems)
         {
@@ -85,9 +108,11 @@ else
             uow.Products.Update(prod);
         }
 
+        // Complete the purchase
         uow.Orders.Delete(1);
         uow.ShoppingCarts.ClearCart(order.ShoppingCartId);
 
+        // Proceed to checkout page
         UpdateTotal();
         NavManager.NavigateTo("/checkout");
     }

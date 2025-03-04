@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CKK.Logic.Models
+﻿namespace CKK.Logic.Models
 {
+    // An order placed by a customer
     public class Order
     {
         public int OrderId { get; set; }

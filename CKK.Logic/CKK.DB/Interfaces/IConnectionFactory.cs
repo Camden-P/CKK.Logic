@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
 namespace CKK.DB.Interfaces
 {
-    public interface IConnectionFactory
+    public interface IConnectionFactory // Interface for connection
     {
         IDbConnection GetConnection { get; }
     }

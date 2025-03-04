@@ -8,9 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images/CKK.png" />
+    <None Remove="Images/info.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CKK.DB\CKK.DB.csproj" />
     <ProjectReference Include="..\CKK.Logic\CKK.Logic.csproj" />
-    <ProjectReference Include="..\CKK.Persistance\CKK.Persistance.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images/CKK.png" />
+    <Resource Include="Images/info.png" />
   </ItemGroup>
 
 </Project>

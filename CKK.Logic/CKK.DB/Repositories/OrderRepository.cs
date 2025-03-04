@@ -1,10 +1,5 @@
 ﻿using CKK.DB.Interfaces;
 using CKK.Logic.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dapper;
 
 namespace CKK.DB.Repositories
@@ -17,7 +12,7 @@ namespace CKK.DB.Repositories
             _connectionFactory = conn;
         }
 
-        public int Add(Order entity)
+        public int Add(Order entity) // Add a order to the database
         {
             var sql = "INSERT INTO Orders (OrderId,OrderNumber,CustomerId,ShoppingCartId) VALUES (@OrderId,@OrderNumber,@CustomerId,@ShoppingCartId)";
 
@@ -29,7 +24,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public int Delete(int id)
+        public int Delete(int id) // Delete a order from the database
         {
             var sql = "DELETE FROM Orders WHERE OrderId = @OrderId";
 
@@ -41,7 +36,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public List<Order> GetAll()
+        public List<Order> GetAll() // Get all orders from the database
         {
             var sql = "SELECT * FROM Orders";
 
@@ -53,7 +48,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public Order GetById(int id)
+        public Order GetById(int id) // Get an order by ID
         {
             var sql = "SELECT * FROM Orders WHERE OrderId = @OrderId";
 
@@ -65,7 +60,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public Order GetOrderByCustomerId(int id)
+        public Order GetOrderByCustomerId(int id) // Get an order by Customer ID
         {
             var sql = "SELECT * FROM Orders WHERE CustomerId = @CustomerId";
 
@@ -77,7 +72,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public int Update(Order entity)
+        public int Update(Order entity) // Update order
         {
             var sql = "UPDATE Orders SET OrderNumber = @OrderNumber, CustomerId = @CustomerId, ShoppingCartId = @ShoppingCartId WHERE OrderId = @OrderId";
 

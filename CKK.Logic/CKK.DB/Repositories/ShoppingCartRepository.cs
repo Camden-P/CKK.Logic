@@ -1,12 +1,6 @@
 ﻿using CKK.DB.Interfaces;
 using CKK.Logic.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dapper;
-using CKK.Logic.Interfaces;
 
 namespace CKK.DB.Repositories
 {
@@ -18,7 +12,7 @@ namespace CKK.DB.Repositories
             _connectionFactory = conn;
         }
 
-        public int Add(ShoppingCartItem entity)
+        public int Add(ShoppingCartItem entity) // Create new shopping cart
         {
             var sql = "INSERT INTO ShoppingCartItems (ShoppingCartId,ProductId,Quantity) VALUES (@ShoppingCartId,@ProductId,@Quantity)";
 
@@ -30,7 +24,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public ShoppingCartItem AddToCart(int shoppingCartId, int productId, int quantity)
+        public ShoppingCartItem AddToCart(int shoppingCartId, int productId, int quantity) // Add items to cart
         {
             using (var connection = _connectionFactory.GetConnection)
             {
@@ -61,7 +55,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public int ClearCart(int shoppingCartId)
+        public int ClearCart(int shoppingCartId) // Remove all items from cart
         {
             var sql = "DELETE FROM ShoppingCartItems WHERE ShoppingCartId = @ShoppingCartId";
 
@@ -85,7 +79,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public decimal GetTotal(int shoppingCartId)
+        public decimal GetTotal(int shoppingCartId) // Get total price from shopping cart
         {
             var sql = "SELECT * FROM ShoppingCartItems WHERE ShoppingCartId = @ShoppingCartId";
 
@@ -99,17 +93,14 @@ namespace CKK.DB.Repositories
                 foreach (var item in result)
                 {
                     item.Product = productRepository.GetById(item.ProductId); // Get product by id
-                    for (int i = 0; i < item.Quantity; i++) // Get quantity to determine how many items to add
-                    {
-                        total += item.Product.Price; // For each item, add the price to the total amount
-                    }
+                    total += item.Product.Price * item.Quantity; // Add the quantity of the current item to the total
                 }
 
                 return total;
             }
         }
 
-        public void Ordered(int shoppingCartId)
+        public void Ordered(int shoppingCartId) // Order items from shopping cart
         {
             var sql = "DELETE FROM ShoppingCartItems WHERE ShoppingCartId = @ShoppingCartId";
 
@@ -120,7 +111,7 @@ namespace CKK.DB.Repositories
             }
         }
 
-        public int Update(ShoppingCartItem entity)
+        public int Update(ShoppingCartItem entity) // Update shopping cart
         {
             var sql = "UPDATE ShoppingCartItems SET ShoppingCartId = @ShoppingCartId, ProductId = @ProductId, Quantity = @Quantity" +
                 " WHERE ShoppingCartId = @ShoppingCartId AND ProductId = @ProductId";
