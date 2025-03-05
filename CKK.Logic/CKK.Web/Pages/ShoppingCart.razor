@@ -72,7 +72,7 @@ else // Else, the page will display the shopping cart
     {
         try
         {
-            if ((int)value < 0) // If the value is below 0, throw an exception
+            if (Convert.ToInt16(value) < 0) // If the value is below 0, throw an exception
             {
                 throw new ArgumentOutOfRangeException();
             }
